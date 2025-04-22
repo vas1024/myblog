@@ -1,0 +1,12 @@
+
+# Логи
+*.log
+
+# Настройки IDE
+.idea/
+*.iml
+
+# Maven
+target/
+dependency-reduced-pom.xml
+
