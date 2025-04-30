@@ -39,6 +39,9 @@ public class PostsController {
 
     List<Post> posts = service.findAll();
     model.addAttribute("posts", posts );
+    for( Post e : posts ) {
+      System.out.println(e.getComments().size() ) ;
+    }
 
     model.addAttribute( "search", "Test");
 

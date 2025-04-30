@@ -1,5 +1,8 @@
 package myblog.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Post {
 
   private Long id;
@@ -7,12 +10,10 @@ public class Post {
   private String text;
   private String textPreview;
   private int likesCount;
+  private List<Comment> comments = new ArrayList<>();
+  private String tag = "";
 
-
-  // Конструктор без аргументов
   public Post() {}
-
-  // Конструктор с аргументами для удобства использования
   public Post(Long id, String title, String text, int likesCount ) {
     this.id = id;
     this.title = title;
@@ -32,12 +33,16 @@ public class Post {
             .toString();
   }
   public void setLikesCount( int likesCount ){ this.likesCount = likesCount; }
+  //public void addComment( String comment ) { comments.add( comment ); }
+  public void setComments( List<Comment> comments ){ this.comments = comments; }
+  public void setTag( String tag ) { this.tag = tag; }
 
   public Long getId() { return id; }
   public String getTitle() { return title; }
   public String getText() { return text; }
   public String getTextPreview() { return textPreview; }
   public int getLikesCount() { return likesCount; }
-
+  public List<Comment> getComments(){ return comments; }
+  public String getTag() { return tag; }
 
 }
