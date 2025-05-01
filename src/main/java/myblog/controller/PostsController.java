@@ -46,10 +46,11 @@ public class PostsController {
     List<Post> posts = service.findAll();
     model.addAttribute("posts", posts );
     for( Post e : posts ) {
-      System.out.println(e.getComments().size() ) ;
+      System.out.println("number of comments = " + e.getComments().size() ) ;
+      System.out.println("tags = " + e.getTags() );
     }
 
-    model.addAttribute( "search", "Test");
+    model.addAttribute( "search", "");
 
     return "posts";
   }
@@ -58,7 +59,6 @@ public class PostsController {
   public ResponseEntity<byte[]> getImage(@PathVariable( name = "id" ) Long id) {
     byte[] imageData = service.getImage( id ); // Предполагаем, что image хранится как byte[]
 
-    System.out.println("Данные изображения: " + Arrays.toString(imageData)); // Первые 10 байт
     System.out.println("Тип данных: " + (imageData != null ? imageData.length : "null"));
     System.out.println("JPEG signature valid: " +
             (imageData[0] == -1 && imageData[1] == -40)); // Должно быть true

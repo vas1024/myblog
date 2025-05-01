@@ -2,6 +2,7 @@ package myblog.service;
 
 import myblog.model.Comment;
 import myblog.model.Post;
+import myblog.repository.PostRepository;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
@@ -18,12 +19,18 @@ import java.util.List;
 
 @Service
 public class PostService {
+  private final PostRepository repository;
+  public PostService( PostRepository repository ){ this.repository = repository; }
+
   public List<Post> findAll(){
+/*
     List<Post> posts = Arrays.asList(
-            new Post(1L, "Иван", "Иванов", 30),
-            new Post(2L, "Пётр", "Петров", 25),
-            new Post(3L, "Мария", "Сидорова", 28)
+            new Post(1L, "Иван", "Иванов", 30, ""),
+            new Post(2L, "Пётр", "Петров", 25, ""),
+            new Post(3L, "Мария", "Сидорова", 28, "")
     );
+*/
+    List<Post> posts = repository.findAll();
     List<Comment> comments = Arrays.asList(
             new Comment( 1, "first comment" ),
             new Comment( 2, "secont comment"),

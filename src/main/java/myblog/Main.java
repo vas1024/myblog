@@ -10,9 +10,9 @@ public class Main {
   public static void main(String[] args) {
 
     List<Post> posts = Arrays.asList(
-            new Post(1L, "Иван", "Иванов", 30),
-            new Post(2L, "Пётр", "Петров", 25),
-            new Post(3L, "Мария", "Сидорова", 28)
+            new Post(1L, "Иван", "Иванов", 30, "bull"),
+            new Post(2L, "Пётр", "Петров", 25, ""),
+            new Post(3L, "Мария", "Сидорова", 28, "")
     );
 
     for( Post e : posts ) {

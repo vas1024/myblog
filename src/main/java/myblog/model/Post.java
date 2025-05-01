@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Post {
 
@@ -18,14 +20,15 @@ public class Post {
   private String textPreview;
   private int likesCount;
   private List<Comment> comments = new ArrayList<>();
-  private String tags = "";
+  private List<String> tags;
 
   public Post() {}
-  public Post(Long id, String title, String text, int likesCount ) {
+  public Post(Long id, String title, String text, int likesCount, String tags ) {
     this.id = id;
     this.title = title;
     setText( text );
     this.likesCount = likesCount;
+    setTags( tags );
   }
 
   public void setId( Long id ) { this.id = id; }
@@ -45,7 +48,16 @@ public class Post {
   public void setLikesCount( int likesCount ){ this.likesCount = likesCount; }
   //public void addComment( String comment ) { comments.add( comment ); }
   public void setComments( List<Comment> comments ){ this.comments = comments; }
-  public void setTags( String tags ) { this.tags = tags; }
+  public void setTags( String tagsString ) {
+
+    System.out.println("tags input string = " + tagsString );
+    tags = Arrays.stream( tagsString.split("#"))
+            .filter(tag -> ! tag.isEmpty())
+            .collect(Collectors.toList());
+    for( String e : tags ){
+      System.out.println( e );
+    }
+  }
 
   public Long getId() { return id; }
   public String getTitle() { return title; }
@@ -53,6 +65,6 @@ public class Post {
   public String getTextPreview() { return textPreview; }
   public int getLikesCount() { return likesCount; }
   public List<Comment> getComments(){ return comments; }
-  public String getTags() { return tags; }
+  public List<String> getTags() { return tags; }
 
 }
