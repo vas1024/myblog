@@ -12,7 +12,7 @@ public class Post {
 
 //  private final TextPreviewSize textPreviewSize ;
 
-  private final int textPreviewSize = 5 ;
+  private final int textPreviewSize = 5;
 
   private Long id;
   private String title;
@@ -21,50 +21,70 @@ public class Post {
   private int likesCount;
   private List<Comment> comments = new ArrayList<>();
   private List<String> tags;
+  private String tagsString;
 
-  public Post() {}
-  public Post(Long id, String title, String text, int likesCount, String tags ) {
-    this.id = id;
-    this.title = title;
-    setText( text );
-    this.likesCount = likesCount;
-    setTags( tags );
+  public Post() {
   }
 
-  public void setId( Long id ) { this.id = id; }
-  public void setTitle( String title ) { this.title = title; }
-  public void setText(String text ) {
+  public Post(Long id, String title, String text, int likesCount, String tags) {
+    this.id = id;
+    this.title = title;
+    setText(text);
+    this.likesCount = likesCount;
+    setTags(tags);
+  }
+
+  public void setId(Long id) { this.id = id; }
+
+  public void setTitle(String title) { this.title = title; }
+
+  public void setText(String text) {
     this.text = text;
     this.textPreview = text.codePoints()
-            .limit( textPreviewSize )
+            .limit(textPreviewSize)
             .collect(StringBuilder::new,
                     (sb, cp) -> sb.appendCodePoint(cp),
                     StringBuilder::append)
             .toString();
-
-    System.out.println( "texPreviewSize = " + textPreviewSize );
-
   }
-  public void setLikesCount( int likesCount ){ this.likesCount = likesCount; }
-  //public void addComment( String comment ) { comments.add( comment ); }
-  public void setComments( List<Comment> comments ){ this.comments = comments; }
-  public void setTags( String tagsString ) {
 
-    System.out.println("tags input string = " + tagsString );
-    tags = Arrays.stream( tagsString.split("#"))
-            .filter(tag -> ! tag.isEmpty())
+  public void setLikesCount(int likesCount) { this.likesCount = likesCount; }
+
+  //public void addComment( String comment ) { comments.add( comment ); }
+  public void setComments(List<Comment> comments) {
+    this.comments = comments;
+  }
+
+  public void addComment(Comment comment) { comments.add(comment); }
+
+  public void setTags(String tagsString) {
+    this.tagsString = tagsString;
+    tags = Arrays.stream(tagsString.split("#"))
+            .filter(tag -> !tag.isEmpty())
             .collect(Collectors.toList());
-    for( String e : tags ){
-      System.out.println( e );
-    }
   }
 
   public Long getId() { return id; }
+
   public String getTitle() { return title; }
+
   public String getText() { return text; }
-  public String getTextPreview() { return textPreview; }
+
+  public String getTextPreview() { return textPreview;  }
+
   public int getLikesCount() { return likesCount; }
-  public List<Comment> getComments(){ return comments; }
+
+  public List<Comment> getComments() { return comments; }
+
   public List<String> getTags() { return tags; }
+
+  public String getTagsString(){ return tagsString; }
+
+  public List<String> getTextParts() {
+    List<String> strings = new ArrayList<>();
+    strings.add(text);
+    return strings;
+  }
+
 
 }

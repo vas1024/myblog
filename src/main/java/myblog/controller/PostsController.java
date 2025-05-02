@@ -8,10 +8,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Arrays;
 import java.util.List;
@@ -45,6 +43,7 @@ public class PostsController {
 
     List<Post> posts = service.findAll();
     model.addAttribute("posts", posts );
+
     for( Post e : posts ) {
       System.out.println("number of comments = " + e.getComments().size() ) ;
       System.out.println("tags = " + e.getTags() );
@@ -57,7 +56,7 @@ public class PostsController {
 
   @GetMapping("/images/{id}")
   public ResponseEntity<byte[]> getImage(@PathVariable( name = "id" ) Long id) {
-    byte[] imageData = service.getImage( id ); // Предполагаем, что image хранится как byte[]
+    byte[] imageData = service.getImageById( id ); // Предполагаем, что image хранится как byte[]
 
     System.out.println("Тип данных: " + (imageData != null ? imageData.length : "null"));
     System.out.println("JPEG signature valid: " +
@@ -78,6 +77,35 @@ public class PostsController {
     return ResponseEntity.ok()
             .contentType(MediaType.IMAGE_JPEG)
             .body(testImage);
+  }
+
+  @GetMapping("/posts/{id}")
+  public String getPostById(@PathVariable( name = "id" ) Long id,
+                            Model model ) {
+
+    Post post = service.getPostById( id );
+    model.addAttribute("post", post );
+
+    System.out.println("Post = " + post );
+
+    return "post";
+  }
+
+  @PostMapping("/posts/{id}/like")
+  public String changeLikes(@PathVariable( name = "id" ) long id,
+                            @RequestParam( name = "like") boolean like,
+                            RedirectAttributes redirectAttributes ){
+
+    Post post = service.getPostById( id );
+    int likesCount = post.getLikesCount();
+    if( like ) likesCount++;
+    else if( likesCount > 0 ) likesCount--;
+    post.setLikesCount( likesCount );
+
+    service.save(post);
+
+    redirectAttributes.addFlashAttribute("updated", true);
+    return "redirect:/posts/" + id;
   }
 
 

@@ -6,9 +6,11 @@ import java.util.List;
 
 public interface PostRepository {
   List<Post> findAll();
-  void save(Post post);
   void deleteById(long id);
-  byte[] getImage(long id);
+  byte[] getImageById(long id);
+  List<Post> findAllWithComments() ;
+  Post getPostById( long id );
+  void save(Post post);
 }
 
 

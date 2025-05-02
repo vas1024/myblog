@@ -23,22 +23,9 @@ public class PostService {
   public PostService( PostRepository repository ){ this.repository = repository; }
 
   public List<Post> findAll(){
-/*
-    List<Post> posts = Arrays.asList(
-            new Post(1L, "Иван", "Иванов", 30, ""),
-            new Post(2L, "Пётр", "Петров", 25, ""),
-            new Post(3L, "Мария", "Сидорова", 28, "")
-    );
-*/
-    List<Post> posts = repository.findAll();
-    List<Comment> comments = Arrays.asList(
-            new Comment( 1, "first comment" ),
-            new Comment( 2, "secont comment"),
-            new Comment( 3, "third comment")
-    );
 
-    posts.get(0).setComments( comments );
-    System.out.println( "size of comments of first post = " + posts.get(0).getComments().size());
+    List<Post> posts = repository.findAllWithComments();
+
     return posts;
   }
 
@@ -73,5 +60,16 @@ public class PostService {
     }
   }
 
+  public byte[] getImageById( long id ) {
+    return repository.getImageById( id );
+  }
+
+  public Post getPostById( long id ){
+    return repository.getPostById(id);
+  }
+
+  public void save( Post post ){
+    repository.save( post );
+  }
 }
 
