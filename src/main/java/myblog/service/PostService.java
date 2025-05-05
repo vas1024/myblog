@@ -80,6 +80,9 @@ public class PostService {
     repository.saveImageById(id, imageBytes);
   }
 
+  public void deletePostById( long id ){
+    repository.deletePostById( id );
+  }
 
 }
 

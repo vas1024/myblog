@@ -13,7 +13,7 @@ public interface PostRepository {
   void save(Post post);
   long saveNew(Post post);
   void saveImageById( long id, byte[] imageBytes);
-
+  void deletePostById( long id );
 }
 
 

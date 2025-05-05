@@ -160,5 +160,13 @@ public class H2PostRepository implements PostRepository {
     return keyHolder.getKey().longValue();
   }
 
+  @Override
+  public void deletePostById( long id ){
+    jdbcTemplate.update("DELETE FROM posts WHERE id = ?", id);
+    //Каскадное удаление уже определено в DDL:
+    //FOREIGN KEY (postid) REFERENCES posts(id) ON DELETE CASCADE
+    //Эта строка означает, что при удалении записи из posts
+    // связанные записи из comments и images будут удалены автоматически самой СУБД.
+  }
 
 }
