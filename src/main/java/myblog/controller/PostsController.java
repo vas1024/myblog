@@ -9,10 +9,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+//import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.web.multipart.MultipartFile;
 
+
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.springframework.http.MediaType.IMAGE_JPEG;
 
@@ -81,12 +87,14 @@ public class PostsController {
 
   @GetMapping("/posts/{id}")
   public String getPostById(@PathVariable( name = "id" ) Long id,
-                            Model model ) {
+                            Model model,
+                            @RequestHeader(value = "Referer", required = false) String referer ) {
 
     Post post = service.getPostById( id );
     model.addAttribute("post", post );
 
     System.out.println("Post = " + post );
+    System.out.println("referrer = " + referer );
 
     return "post";
   }
@@ -107,6 +115,63 @@ public class PostsController {
     redirectAttributes.addFlashAttribute("updated", true);
     return "redirect:/posts/" + id;
   }
+
+
+  @GetMapping("/posts/{id}/edit")
+  public String editPost( @PathVariable( name = "id" ) long id,
+                          Model model,
+                          RedirectAttributes redirectAttributes ){
+    Post post = service.getPostById( id );
+    model.addAttribute("post", post );
+
+    System.out.println( "Controller, method editPost got post object: ");
+    System.out.println( post );
+
+    return "add-post";
+  }
+
+  @GetMapping("/posts/add")
+  public String addPost( Model model ){
+
+    return "add-post";
+  }
+
+  @PostMapping("/posts/{id}")
+  public String savePostById(
+          @PathVariable("id") Long id,
+          @RequestParam(value = "image", required = false) MultipartFile file,
+          @ModelAttribute(name = "post") Post post      ) {
+
+    saveImage( id, file );
+    service.save( post );
+    return "redirect:/posts/" + id ;
+  }
+
+  @PostMapping("/posts")
+  public String saveNewPost(
+          @RequestParam(value = "image", required = false) MultipartFile file,
+          @ModelAttribute(name = "post") Post post      ) {
+
+    long id = service.saveNew( post );
+    saveImage( id, file );
+    return "redirect:/posts";
+  }
+
+
+  public void saveImage( long id, MultipartFile file ){
+    System.out.println("File: " + (file != null ? file.getOriginalFilename() : "null"));
+    if( file != null ) {
+      byte[] imageBytes;
+      try {
+        imageBytes = file.getBytes();
+      } catch (IOException e) {
+        throw new RuntimeException("Ошибка чтения файла", e);
+      }
+      service.saveImageById(id, imageBytes);
+    }
+  }
+
+
 
 
 }

@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 public class Post {
 
 //  private final TextPreviewSize textPreviewSize ;
@@ -23,8 +24,7 @@ public class Post {
   private List<String> tags;
   private String tagsString;
 
-  public Post() {
-  }
+  public Post() {}  // Обязательно! для тимьяна
 
   public Post(Long id, String title, String text, int likesCount, String tags) {
     this.id = id;
@@ -64,6 +64,9 @@ public class Post {
             .collect(Collectors.toList());
   }
 
+  public void setTagsAsText( String tags ){ this.tagsString = tags; }
+
+
   public Long getId() { return id; }
 
   public String getTitle() { return title; }
@@ -80,10 +83,23 @@ public class Post {
 
   public String getTagsString(){ return tagsString; }
 
+  public String getTagsAsText(){ return tagsString; }
+
   public List<String> getTextParts() {
-    List<String> strings = new ArrayList<>();
-    strings.add(text);
-    return strings;
+    return Arrays.asList(text.split("\\r?\\n"));
+  }
+
+
+  @Override
+  public String toString() {
+    return "Post{" +
+            "id=" + id +
+            ", title='" + title + '\'' +
+            ", text='" + text + '\'' +
+            ", tags=" + tags + '\'' +
+            ",   tagsString = " + tagsString +
+            ",   likesCount = " + likesCount +
+            '}';
   }
 
 

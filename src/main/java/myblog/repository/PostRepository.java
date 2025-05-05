@@ -11,6 +11,9 @@ public interface PostRepository {
   List<Post> findAllWithComments() ;
   Post getPostById( long id );
   void save(Post post);
+  long saveNew(Post post);
+  void saveImageById( long id, byte[] imageBytes);
+
 }
 
 

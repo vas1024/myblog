@@ -3,7 +3,12 @@ package myblog.repository;
 import myblog.model.Comment;
 import myblog.model.Post;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
@@ -126,5 +131,34 @@ public class H2PostRepository implements PostRepository {
     jdbcTemplate.update("UPDATE posts SET title = ?, text = ?, likes = ?, tags = ? WHERE id = ?",
             post.getTitle(), post.getText(), post.getLikesCount(), post.getTagsString(), post.getId() );
   }
+
+  @Override
+  public void saveImageById( long id, byte[] imageBytes){
+    // Возвращает количество удаленных строк (0 если записи не было)
+    int rows = jdbcTemplate.update("delete from images where postid = ?", id);
+    System.out.println("from table Images were removerd " + rows + " records with postid " + id);
+    jdbcTemplate.update( "insert into images(postid, image) values ( ?, ? )",
+            id, imageBytes );
+  }
+
+  @Override
+  public long saveNew(Post post){
+    KeyHolder keyHolder = new GeneratedKeyHolder();
+
+    jdbcTemplate.update(connection -> {
+      PreparedStatement ps = connection.prepareStatement(
+             "insert into posts( title, text, likes, tags ) values (  ?, ?, ?, ? )",
+              Statement.RETURN_GENERATED_KEYS
+      );
+      ps.setString(1, post.getTitle() );
+      ps.setString(2, post.getText() );
+      ps.setInt(   3, post.getLikesCount() );
+      ps.setString(4, post.getTagsString() );
+      return ps;
+    }, keyHolder);
+
+    return keyHolder.getKey().longValue();
+  }
+
 
 }

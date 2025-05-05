@@ -71,5 +71,15 @@ public class PostService {
   public void save( Post post ){
     repository.save( post );
   }
+
+  public long saveNew( Post post ){
+    return repository.saveNew( post );
+  }
+
+  public void saveImageById( long id, byte[] imageBytes){
+    repository.saveImageById(id, imageBytes);
+  }
+
+
 }
 
