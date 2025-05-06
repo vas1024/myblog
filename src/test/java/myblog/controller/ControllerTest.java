@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @WebAppConfiguration
 public class ControllerTest {
   @Autowired
-  PostsController controller;
+  private PostsController controller;
 
   @Test
   void testController(){
