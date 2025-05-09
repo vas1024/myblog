@@ -25,9 +25,9 @@ import static org.springframework.http.MediaType.IMAGE_JPEG;
 
 @Controller
 public class PostsController {
-  private final PostService service;
-  public PostsController(PostService service) {
-    this.service = service;
+  private final PostService postService;
+  public PostsController(PostService postService) {
+    this.postService = postService;
   }
 
   @GetMapping("/") // Принимаем GET-запрос по адресу /home
@@ -47,7 +47,7 @@ public class PostsController {
     paging.setHasPrevious(false);
     model.addAttribute( "paging", paging );
 
-    List<Post> posts = service.findAll();
+    List<Post> posts = postService.findAll();
     model.addAttribute("posts", posts );
 
     for( Post e : posts ) {
@@ -62,7 +62,7 @@ public class PostsController {
 
   @GetMapping("/images/{id}")
   public ResponseEntity<byte[]> getImage(@PathVariable( name = "id" ) Long id) {
-    byte[] imageData = service.getImageById( id ); // Предполагаем, что image хранится как byte[]
+    byte[] imageData = postService.getImageById( id ); // Предполагаем, что image хранится как byte[]
 
     System.out.println("Тип данных: " + (imageData != null ? imageData.length : "null"));
     System.out.println("JPEG signature valid: " +
@@ -78,7 +78,7 @@ public class PostsController {
 
   @GetMapping("/testimage")
   public ResponseEntity<byte[]> getTestImage() {
-    byte[] testImage = service.getImage( 0L );
+    byte[] testImage = postService.getImage( 0L );
 
     return ResponseEntity.ok()
             .contentType(MediaType.IMAGE_JPEG)
@@ -90,7 +90,7 @@ public class PostsController {
                             Model model,
                             @RequestHeader(value = "Referer", required = false) String referer ) {
 
-    Post post = service.getPostById( id );
+    Post post = postService.getPostById( id );
     model.addAttribute("post", post );
 
     System.out.println("Post = " + post );
@@ -104,13 +104,13 @@ public class PostsController {
                             @RequestParam( name = "like") boolean like,
                             RedirectAttributes redirectAttributes ){
 
-    Post post = service.getPostById( id );
+    Post post = postService.getPostById( id );
     int likesCount = post.getLikesCount();
     if( like ) likesCount++;
     else if( likesCount > 0 ) likesCount--;
     post.setLikesCount( likesCount );
 
-    service.save(post);
+    postService.save(post);
 
     redirectAttributes.addFlashAttribute("updated", true);
     return "redirect:/posts/" + id;
@@ -121,7 +121,7 @@ public class PostsController {
   public String editPost( @PathVariable( name = "id" ) long id,
                           Model model,
                           RedirectAttributes redirectAttributes ){
-    Post post = service.getPostById( id );
+    Post post = postService.getPostById( id );
     model.addAttribute("post", post );
 
     System.out.println( "Controller, method editPost got post object: ");
@@ -143,7 +143,7 @@ public class PostsController {
           @ModelAttribute(name = "post") Post post      ) {
 
     saveImage( id, file );
-    service.save( post );
+    postService.save( post );
     return "redirect:/posts/" + id ;
   }
 
@@ -152,7 +152,7 @@ public class PostsController {
           @RequestParam(value = "image", required = false) MultipartFile file,
           @ModelAttribute(name = "post") Post post      ) {
 
-    long id = service.saveNew( post );
+    long id = postService.saveNew( post );
     saveImage( id, file );
     return "redirect:/posts";
   }
@@ -167,13 +167,13 @@ public class PostsController {
       } catch (IOException e) {
         throw new RuntimeException("Ошибка чтения файла", e);
       }
-      service.saveImageById(id, imageBytes);
+      postService.saveImageById(id, imageBytes);
     }
   }
 
   @PostMapping("/posts/{id}/delete")
   public String deletePost( @PathVariable(name="id") long id){
-    service.deletePostById( id );
+    postService.deletePostById( id );
     return "redirect:/posts";
   }
 

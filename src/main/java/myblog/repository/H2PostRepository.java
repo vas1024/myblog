@@ -38,11 +38,6 @@ public class H2PostRepository implements PostRepository {
   }
 
 
-  @Override
-  public void deleteById(long id) {
-    jdbcTemplate.update("delete from users where id = ?", id);
-  }
-
 
   public List<Comment> getCommentsById(long id ){
     String sql = "select id, text from comments where postid = ?";
