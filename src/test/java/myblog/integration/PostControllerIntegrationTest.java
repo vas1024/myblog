@@ -1,6 +1,7 @@
 package myblog.integration;
 
 //import myblog.config.TestConfig;
+import myblog.model.Post;
 import myblog.repository.H2PostRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 //@SpringJUnitConfig(classes = WebConfiguration.class)
 @ExtendWith(SpringExtension.class)
@@ -103,5 +104,46 @@ class PostControllerIntegrationTest {
   }
 
 
+  @Test
+  void addComment_shouldSaveNewCommentAndRedirect() throws Exception {
+    long postId = 1;
+    mockMvc.perform(post("/posts/{id}/comments", postId )
+                    .param("text", "comment")
+            )
+            .andExpect(status().is3xxRedirection())
+            .andExpect(redirectedUrl("/posts/" + postId ));
+  }
+
+  @Test
+  void editComment_shouldEditCommentAndRedirect() throws Exception {
+    long postId = 1;
+    int commentId = 1;
+    String initComment = "this is some comment";
+    String afterEditComment ="this is comment after edit";
+    jdbcTemplate.update(
+"insert into comments(id, postid, text) values ( ?, ?, ? )",
+    commentId, postId, initComment );
+    mockMvc.perform(post("/posts/{id}/comments/{commentId}", postId, commentId )
+                    .param("text", afterEditComment )
+             )
+            .andDo(print())
+            .andExpect(status().is3xxRedirection())
+            .andExpect(redirectedUrl("/posts/" + postId ));
+  }
+
+  @Test
+  void deleteComment_shouldDeleteCommentAndRedirect() throws Exception {
+    long postId = 1;
+    int commentId = 1;
+    String initComment = "this is some comment";
+    jdbcTemplate.update(
+            "insert into comments(id, postid, text) values ( ?, ?, ? )",
+            commentId, postId, initComment );
+    mockMvc.perform(post("/posts/{id}/comments/{commentId}/delete", postId, commentId )
+            )
+            .andDo(print())
+            .andExpect(status().is3xxRedirection())
+            .andExpect(redirectedUrl("/posts/" + postId ));
+  }
 
 }

@@ -178,5 +178,32 @@ public class PostsController {
   }
 
 
+  @PostMapping("posts/{id}/comments")
+  public String addComment(
+              @PathVariable("id") Long id,
+              @RequestParam(value = "text", required = false) String comment
+            ) {
+    postService.addComment( id, comment );
+    return "redirect:/posts/" + id;
+  }
+
+  @PostMapping("posts/{id}/comments/{commentId}")
+  public String editComment(
+          @PathVariable("id") Long id,
+          @RequestParam(value = "text", required = false) String text,
+          @PathVariable("commentId") int commentId
+        ) {
+    postService.editComment( id, commentId, text);
+    return "redirect:/posts/" + id;
+  }
+
+  @PostMapping("posts/{id}/comments/{commentId}/delete")
+  public String deleteComment(
+          @PathVariable("id") Long id,
+          @PathVariable("commentId") int commentId
+  ) {
+    postService.deleteComment( id, commentId );
+    return "redirect:/posts/" + id;
+  }
 
 }

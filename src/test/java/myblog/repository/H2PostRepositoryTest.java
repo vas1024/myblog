@@ -85,4 +85,46 @@ public class H2PostRepositoryTest {
             .orElse(null);
     assertNull(deletedPost);
   }
+
+  @Test
+  void addComment_shouldAddCommentToDB() {
+    long id = 1;
+    String comment3 = "this is third comment";
+    postRepository.addComment(id, "comment1");
+    postRepository.addComment(id, "comment2");
+    postRepository.addComment(id, comment3 );
+    Post post =  postRepository.getPostById(id) ;
+
+    assertEquals(3, post.getComments().size() );
+    assertEquals( comment3, post.getComments().get(2).getText() );
+  }
+
+  @Test
+  void editComment_shouldAddCommentToDB() {
+    long postId = 1;
+    String commentBefore = "this is new comment";
+    String commentAfter = "this is comment after edit";
+    postRepository.addComment(postId, commentBefore );
+    Post post =  postRepository.getPostById(postId) ;
+    int commentId = (int) post.getComments().get(0).getId();
+    System.out.println( "Comment Id = " + commentId ); // = 4, не понимаю, почему он не 1
+    postRepository.editComment(postId,commentId,commentAfter);
+    post =  postRepository.getPostById(postId) ;
+    assertEquals( commentAfter, post.getComments().get(0).getText() );
+  }
+
+  @Test
+  void deleteComment_shouldDeleteCommentFromDB() {
+    long postId = 1;
+    String comment = "this is new comment";
+    postRepository.addComment(postId, comment );
+    Post post =  postRepository.getPostById(postId) ;
+    int commentId = (int) post.getComments().get(0).getId();
+    System.out.println( "Comment Id = " + commentId ); // = 4, не понимаю, почему он не 1
+    postRepository.deleteComment(postId, commentId);
+    post =  postRepository.getPostById(postId) ;
+    assertEquals( 0, post.getComments().size() );
+  }
+
+
 }

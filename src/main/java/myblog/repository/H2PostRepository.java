@@ -164,4 +164,21 @@ public class H2PostRepository implements PostRepository {
     // связанные записи из comments и images будут удалены автоматически самой СУБД.
   }
 
+  @Override
+  public void addComment( long id, String comment ){
+    jdbcTemplate.update( "insert into comments(postid, text) values ( ?, ? )",
+            id, comment );
+  }
+
+  @Override
+  public void editComment( long id, int commentId, String text ){
+    jdbcTemplate.update( "update comments set text = ? where postid = ? and id = ?",
+            text, id, commentId );
+  }
+
+  @Override
+  public void deleteComment( long id, int commentId){
+    jdbcTemplate.update( "delete from comments where postid = ? and id = ?",
+             id, commentId );
+  }
 }

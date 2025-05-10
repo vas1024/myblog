@@ -84,5 +84,12 @@ public class PostService {
     repository.deletePostById( id );
   }
 
+  public void addComment( long id, String comment ) { repository.addComment( id, comment ); }
+
+  public void editComment( long id, int commentId, String text ) { repository.editComment( id, commentId, text ); }
+
+  public void deleteComment( long id, int commentId ) { repository.deleteComment( id, commentId ); }
+
+
 }
 

@@ -13,6 +13,9 @@ public interface PostRepository {
   long saveNew(Post post);
   void saveImageById( long id, byte[] imageBytes);
   void deletePostById( long id );
+  void addComment( long id, String comment );
+  void editComment( long id, int commentId, String text );
+  void deleteComment( long id, int commentId );
 }
 
 
