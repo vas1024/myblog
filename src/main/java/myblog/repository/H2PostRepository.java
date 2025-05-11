@@ -49,10 +49,11 @@ public class H2PostRepository implements PostRepository {
   }
 
   @Override
-  public List<Post> findAllWithComments() {
-
+  public List<Post> findAllWithComments( int page, int size) {
+    int offset = ( page -1 ) * size;
     List<Post> posts = jdbcTemplate.query(
-            "select id, title, text, likes, tags  from posts",
+            "select id, title, text, likes, tags  from posts ORDER BY id LIMIT ? OFFSET ?",
+            new Object[]{size, offset},
             (rs, rowNum) -> new Post(
                     rs.getLong("id"),
                     rs.getString("title"),
@@ -83,6 +84,12 @@ public class H2PostRepository implements PostRepository {
     );
 
     return posts;
+  }
+
+  @Override
+  public long countPosts() {
+    return jdbcTemplate.queryForObject(
+            "SELECT COUNT(*) FROM posts", Long.class);
   }
 
   @Override
@@ -181,4 +188,19 @@ public class H2PostRepository implements PostRepository {
     jdbcTemplate.update( "delete from comments where postid = ? and id = ?",
              id, commentId );
   }
+
+  @Override
+  public List<Post> findAll(int page, int size) {
+    int offset = page * size;
+    return jdbcTemplate.query(
+            "select id, title, text, likes, tags  from posts LIMIT ? OFFSET ?",
+            (rs, rowNum) -> new Post(
+                    rs.getLong("id"),
+                    rs.getString("title"),
+                    rs.getString("text"),
+                    rs.getInt("likes"),
+                    rs.getString("tags")
+            ));
+  }
+
 }

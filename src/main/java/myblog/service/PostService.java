@@ -22,13 +22,13 @@ public class PostService {
   private final PostRepository repository;
   public PostService( PostRepository repository ){ this.repository = repository; }
 
-  public List<Post> findAll(){
 
-    List<Post> posts = repository.findAllWithComments();
-
+  public List<Post> findAll(int page, int size){
+    List<Post> posts = repository.findAllWithComments(page,size);
     return posts;
   }
 
+  public long countPosts(){ return repository.countPosts(); }
 
 
   public static byte[] getImage( long id ) {

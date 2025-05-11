@@ -6,8 +6,10 @@ import java.util.List;
 
 public interface PostRepository {
   List<Post> findAll();
+  List<Post> findAll(int page, int size);
   byte[] getImageById(long id);
-  List<Post> findAllWithComments() ;
+  List<Post> findAllWithComments(int page, int size) ;
+  long countPosts();
   Post getPostById( long id );
   void save(Post post);
   long saveNew(Post post);

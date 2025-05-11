@@ -37,24 +37,25 @@ public class PostsController {
 //  public String getPosts(@ModelAttribute String search,
 //                         @ModelAttribute Paging paging,
 //                         Model model){
-  public String getPosts( Model model ) {
-    System.out.println( "Hello world" );
+  public String getPosts(
+                           @RequestParam(name = "search", required = false) String search,
+                           @RequestParam(name = "pageSize", defaultValue = "10") int size,
+                           @RequestParam(name = "pageNumber", defaultValue = "1") int page,
+                           Model model
+                        ) {
 
+    long total = postService.countPosts();
+    boolean hasNext = page * size < total;
+    boolean hasPrevious = page > 1;
     Paging paging = new Paging();
-    paging.setPageNumber(1);
-    paging.setPageSize(10);
-    paging.setHasNext(false);
-    paging.setHasPrevious(false);
-    model.addAttribute( "paging", paging );
+    paging.setPageNumber( page );
+    paging.setPageSize( size );
+    paging.setHasNext( hasNext );
+    paging.setHasPrevious( hasPrevious );
+    model.addAttribute("paging", paging);
 
-    List<Post> posts = postService.findAll();
+    List<Post> posts = postService.findAll(page, size );
     model.addAttribute("posts", posts );
-
-    for( Post e : posts ) {
-      System.out.println("number of comments = " + e.getComments().size() ) ;
-      System.out.println("tags = " + e.getTags() );
-    }
-
     model.addAttribute( "search", "");
 
     return "posts";
