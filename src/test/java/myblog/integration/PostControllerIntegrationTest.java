@@ -75,7 +75,7 @@ class PostControllerIntegrationTest {
             .andReturn()
             .getResponse()
             .getContentAsString();
-    System.out.println( "!!!!!!!!!!!!!!!!!!!!!!!!!!!" + html );
+//    System.out.println( "!!!!!!!!!!!!!!!!!!!!!!!!!!!" + html );
     assertTrue(html.contains("my very firs post"));
   }
 

@@ -107,7 +107,7 @@ public class H2PostRepositoryTest {
     postRepository.addComment(postId, commentBefore );
     Post post =  postRepository.getPostById(postId) ;
     int commentId = (int) post.getComments().get(0).getId();
-    System.out.println( "Comment Id = " + commentId ); // = 4, не понимаю, почему он не 1
+//    System.out.println( "Comment Id = " + commentId ); // = 4, не понимаю, почему он не 1
     postRepository.editComment(postId,commentId,commentAfter);
     post =  postRepository.getPostById(postId) ;
     assertEquals( commentAfter, post.getComments().get(0).getText() );

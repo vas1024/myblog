@@ -141,7 +141,7 @@ public class H2PostRepository implements PostRepository {
   public void saveImageById( long id, byte[] imageBytes){
     // Возвращает количество удаленных строк (0 если записи не было)
     int rows = jdbcTemplate.update("delete from images where postid = ?", id);
-    System.out.println("from table Images were removerd " + rows + " records with postid " + id);
+//    System.out.println("from table Images were removerd " + rows + " records with postid " + id);
     jdbcTemplate.update( "insert into images(postid, image) values ( ?, ? )",
             id, imageBytes );
   }

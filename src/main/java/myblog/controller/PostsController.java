@@ -52,7 +52,6 @@ public class PostsController {
     paging.setHasPrevious( hasPrevious );
     model.addAttribute("paging", paging);
 
-    System.out.println("Search = " + search );
     model.addAttribute("search", search );
 
     List<Post> posts = postService.findAll(page, size, search );
@@ -66,9 +65,9 @@ public class PostsController {
   public ResponseEntity<byte[]> getImage(@PathVariable( name = "id" ) Long id) {
     byte[] imageData = postService.getImageById( id ); // Предполагаем, что image хранится как byte[]
 
-    System.out.println("Тип данных: " + (imageData != null ? imageData.length : "null"));
-    System.out.println("JPEG signature valid: " +
-            (imageData[0] == -1 && imageData[1] == -40)); // Должно быть true
+//    System.out.println("Тип данных: " + (imageData != null ? imageData.length : "null"));
+//    System.out.println("JPEG signature valid: " +
+//            (imageData[0] == -1 && imageData[1] == -40)); // Должно быть true
 
     return ResponseEntity.ok()
             .header(HttpHeaders.CONTENT_TYPE, "image/jpeg")  // Жёстко задаём тип
@@ -94,9 +93,6 @@ public class PostsController {
 
     Post post = postService.getPostById( id );
     model.addAttribute("post", post );
-
-    System.out.println("Post = " + post );
-    System.out.println("referrer = " + referer );
 
     return "post";
   }
@@ -125,9 +121,6 @@ public class PostsController {
                           RedirectAttributes redirectAttributes ){
     Post post = postService.getPostById( id );
     model.addAttribute("post", post );
-
-    System.out.println( "Controller, method editPost got post object: ");
-    System.out.println( post );
 
     return "add-post";
   }
@@ -161,7 +154,7 @@ public class PostsController {
 
 
   public void saveImage( long id, MultipartFile file ){
-    System.out.println("File: " + (file != null ? file.getOriginalFilename() : "null"));
+//    System.out.println("File: " + (file != null ? file.getOriginalFilename() : "null"));
     if( file != null ) {
       byte[] imageBytes;
       try {
