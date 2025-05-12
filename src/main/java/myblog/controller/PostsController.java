@@ -30,20 +30,18 @@ public class PostsController {
     this.postService = postService;
   }
 
-  @GetMapping("/") // Принимаем GET-запрос по адресу /home
+
+  @GetMapping("/")
   public String homePage() { return "redirect:/posts"; }
 
+
   @GetMapping("/posts")
-//  public String getPosts(@ModelAttribute String search,
-//                         @ModelAttribute Paging paging,
-//                         Model model){
   public String getPosts(
-                           @RequestParam(name = "search", required = false) String search,
+                           @RequestParam(name = "search", required = false, defaultValue = "" ) String search,
                            @RequestParam(name = "pageSize", defaultValue = "10") int size,
                            @RequestParam(name = "pageNumber", defaultValue = "1") int page,
                            Model model
                         ) {
-
     long total = postService.countPosts();
     boolean hasNext = page * size < total;
     boolean hasPrevious = page > 1;
@@ -54,12 +52,15 @@ public class PostsController {
     paging.setHasPrevious( hasPrevious );
     model.addAttribute("paging", paging);
 
-    List<Post> posts = postService.findAll(page, size );
+    System.out.println("Search = " + search );
+    model.addAttribute("search", search );
+
+    List<Post> posts = postService.findAll(page, size, search );
     model.addAttribute("posts", posts );
-    model.addAttribute( "search", "");
 
     return "posts";
   }
+
 
   @GetMapping("/images/{id}")
   public ResponseEntity<byte[]> getImage(@PathVariable( name = "id" ) Long id) {

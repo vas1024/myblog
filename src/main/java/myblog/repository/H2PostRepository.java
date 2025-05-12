@@ -49,11 +49,13 @@ public class H2PostRepository implements PostRepository {
   }
 
   @Override
-  public List<Post> findAllWithComments( int page, int size) {
+  public List<Post> findAllWithComments( int page, int size, String search) {
     int offset = ( page -1 ) * size;
+    String tag = "%" + search + "%";
+
     List<Post> posts = jdbcTemplate.query(
-            "select id, title, text, likes, tags  from posts ORDER BY id LIMIT ? OFFSET ?",
-            new Object[]{size, offset},
+            "select id, title, text, likes, tags  from posts WHERE tags LIKE ? ORDER BY id LIMIT ? OFFSET ?",
+            new Object[]{tag, size, offset},
             (rs, rowNum) -> new Post(
                     rs.getLong("id"),
                     rs.getString("title"),
@@ -85,6 +87,7 @@ public class H2PostRepository implements PostRepository {
 
     return posts;
   }
+
 
   @Override
   public long countPosts() {

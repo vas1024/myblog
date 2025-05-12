@@ -23,8 +23,8 @@ public class PostService {
   public PostService( PostRepository repository ){ this.repository = repository; }
 
 
-  public List<Post> findAll(int page, int size){
-    List<Post> posts = repository.findAllWithComments(page,size);
+  public List<Post> findAll(int page, int size, String search){
+    List<Post> posts = repository.findAllWithComments(page,size, search);
     return posts;
   }
 

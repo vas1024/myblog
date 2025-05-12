@@ -8,7 +8,7 @@ public interface PostRepository {
   List<Post> findAll();
   List<Post> findAll(int page, int size);
   byte[] getImageById(long id);
-  List<Post> findAllWithComments(int page, int size) ;
+  List<Post> findAllWithComments(int page, int size, String search) ;
   long countPosts();
   Post getPostById( long id );
   void save(Post post);
