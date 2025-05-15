@@ -11,16 +11,8 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackages = {"myblog","myblog.controller","myblog.config"})
-@PropertySource("classpath:application.properties") // Для считывания application.properties
+@PropertySource("classpath:application.properties")
 public class WebConfiguration {
-  /*
-  @Bean
-  public CommonsMultipartResolver multipartResolver() {
-    CommonsMultipartResolver resolver = new CommonsMultipartResolver();
-    resolver.setMaxUploadSize(10485760); // 10 MB
-    return resolver;
-  }
-*/
 
   @Bean
   public StandardServletMultipartResolver multipartResolver() {

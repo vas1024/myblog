@@ -65,7 +65,7 @@ class PostControllerIntegrationTest {
             .andExpect(view().name("posts"))
             .andExpect(model().attributeExists("posts"))
     // xpath не может распарсить нормальный html tag <input    >
-    // если усрался xpath, надо добавлять депенденси  <artifactId>nekohtml</artifactId>
+    // если всё же требуется xpath, надо добавлять депенденси  <artifactId>nekohtml</artifactId>
 //            .andExpect(xpath("//table/tr[td//h2]").nodeCount(3))
 //            .andExpect(xpath("//table/tr[td[@style='border-bottom:thin solid;']]").nodeCount(3))
             ;
@@ -75,7 +75,6 @@ class PostControllerIntegrationTest {
             .andReturn()
             .getResponse()
             .getContentAsString();
-//    System.out.println( "!!!!!!!!!!!!!!!!!!!!!!!!!!!" + html );
     assertTrue(html.contains("my very firs post"));
   }
 

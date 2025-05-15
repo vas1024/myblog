@@ -120,13 +120,10 @@ public class H2PostRepositoryTest {
     postRepository.addComment(postId, comment );
     Post post =  postRepository.getPostById(postId) ;
     int commentId = (int) post.getComments().get(0).getId();
-    System.out.println( "Comment Id = " + commentId ); // = 4, не понимаю, почему он не 1
     postRepository.deleteComment(postId, commentId);
     post =  postRepository.getPostById(postId) ;
     assertEquals( 0, post.getComments().size() );
   }
-
-
 
 
 }

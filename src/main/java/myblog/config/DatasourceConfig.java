@@ -32,7 +32,6 @@ public class DatasourceConfig {
     return dataSource;
   }
 
-  // JdbcTemplate — компонент для выполнения запросов
   @Bean
   public JdbcTemplate jdbcTemplate(DataSource dataSource) {
     return new JdbcTemplate(dataSource);

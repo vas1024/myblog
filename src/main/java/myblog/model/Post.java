@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 
 public class Post {
 
-//  private final TextPreviewSize textPreviewSize ;
 
   private final int textPreviewSize = 5;
 
@@ -50,7 +49,6 @@ public class Post {
 
   public void setLikesCount(int likesCount) { this.likesCount = likesCount; }
 
-  //public void addComment( String comment ) { comments.add( comment ); }
   public void setComments(List<Comment> comments) {
     this.comments = comments;
   }

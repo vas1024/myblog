@@ -65,9 +65,6 @@ public class PostsController {
   public ResponseEntity<byte[]> getImage(@PathVariable( name = "id" ) Long id) {
     byte[] imageData = postService.getImageById( id ); // Предполагаем, что image хранится как byte[]
 
-//    System.out.println("Тип данных: " + (imageData != null ? imageData.length : "null"));
-//    System.out.println("JPEG signature valid: " +
-//            (imageData[0] == -1 && imageData[1] == -40)); // Должно быть true
 
     return ResponseEntity.ok()
             .header(HttpHeaders.CONTENT_TYPE, "image/jpeg")  // Жёстко задаём тип
@@ -154,7 +151,6 @@ public class PostsController {
 
 
   public void saveImage( long id, MultipartFile file ){
-//    System.out.println("File: " + (file != null ? file.getOriginalFilename() : "null"));
     if( file != null ) {
       byte[] imageBytes;
       try {
