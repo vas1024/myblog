@@ -1,6 +1,6 @@
 package myblog.repository;
 
-import myblog.config.DatasourceConfig;
+
 import myblog.model.Post;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-@SpringJUnitConfig(classes = {DatasourceConfig.class, H2PostRepository.class})
+@SpringJUnitConfig(classes = { H2PostRepository.class})
 @TestPropertySource(locations = "classpath:application.properties")
 public class H2PostRepositoryTest {
 
