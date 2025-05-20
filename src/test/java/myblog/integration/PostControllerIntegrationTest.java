@@ -1,13 +1,20 @@
 package myblog.integration;
 
-//import myblog.config.TestConfig;
+
+import myblog.controller.PostsController;
 import myblog.model.Post;
 import myblog.repository.H2PostRepository;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -17,8 +24,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-//import myblog.config.TestConfig;
-import myblog.WebConfiguration;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -26,23 +31,21 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
-//@SpringJUnitConfig(classes = WebConfiguration.class)
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = WebConfiguration.class)
-@WebAppConfiguration
+
+
+@SpringBootTest
+@ActiveProfiles("test")
+@AutoConfigureMockMvc
 class PostControllerIntegrationTest {
 
   @Autowired
-  private WebApplicationContext webApplicationContext;
+  private MockMvc mockMvc;
 
   @Autowired
   private JdbcTemplate jdbcTemplate;
 
-  private MockMvc mockMvc;
-
   @BeforeEach
   void setUp() {
-    mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
 
     // Очистка и заполнение тестовых данных в базе
     jdbcTemplate.execute("DELETE FROM posts");
